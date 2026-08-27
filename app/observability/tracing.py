@@ -1,7 +1,7 @@
 """Distributed tracing utilities."""
 
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 
 @contextmanager
