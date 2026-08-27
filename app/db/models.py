@@ -3,8 +3,9 @@
 import enum
 import uuid
 from datetime import datetime
+from typing import Any
 
-from sqlalchemy import DateTime, Enum, ForeignKey, String, Text, func
+from sqlalchemy import DateTime, Enum, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -40,9 +41,7 @@ class Workflow(Base):
         Enum(WorkflowStatus, name="workflow_status"),
         default=WorkflowStatus.PENDING,
     )
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -61,15 +60,13 @@ class ApprovalRequest(Base):
         UUID(as_uuid=True), ForeignKey("workflows.id"), nullable=False
     )
     action: Mapped[str] = mapped_column(String(255), nullable=False)
-    payload: Mapped[dict] = mapped_column(JSONB, default=dict)
+    payload: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
     status: Mapped[ApprovalStatus] = mapped_column(
         Enum(ApprovalStatus, name="approval_status"),
         default=ApprovalStatus.PENDING,
     )
     reviewer: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     workflow: Mapped["Workflow"] = relationship(back_populates="approval_requests")
@@ -86,9 +83,7 @@ class AuditEvent(Base):
     )
     event_type: Mapped[str] = mapped_column(String(255), nullable=False)
     actor: Mapped[str] = mapped_column(String(255), nullable=False)
-    details: Mapped[dict] = mapped_column(JSONB, default=dict)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    details: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     workflow: Mapped["Workflow | None"] = relationship(back_populates="audit_events")
