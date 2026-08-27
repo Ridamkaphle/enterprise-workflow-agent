@@ -1,6 +1,7 @@
 """MCP tool registration and discovery."""
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 ToolHandler = Callable[..., Any]
 
