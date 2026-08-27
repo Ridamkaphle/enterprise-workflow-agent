@@ -2,11 +2,10 @@
 
 import asyncio
 
-from app.db.base import Base
-from app.db.postgres import engine
-
 # Import models so SQLAlchemy registers them with Base.metadata.
 from app.db import models  # noqa: F401
+from app.db.base import Base
+from app.db.postgres import engine
 
 
 async def create_tables() -> None:
