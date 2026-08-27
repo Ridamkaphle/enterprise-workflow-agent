@@ -14,7 +14,10 @@ services:
   postgres:
     image: postgres:16-alpine
     ports:
-      - "5432:5432"
+      # Host port 5433, not 5432: on this dev machine a native Windows
+      # Postgres service already owns 5432, silently shadowing this
+      # container for host-side connections (e.g. pytest).
+      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
