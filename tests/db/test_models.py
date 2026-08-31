@@ -40,9 +40,7 @@ async def test_workflow_with_approval_and_audit(db_session: AsyncSession) -> Non
     db_session.add_all([workflow, approval, audit])
     await db_session.commit()
 
-    result = await db_session.execute(
-        select(Workflow).where(Workflow.id == workflow.id)
-    )
+    result = await db_session.execute(select(Workflow).where(Workflow.id == workflow.id))
     saved = result.scalar_one()
 
     assert len(saved.approval_requests) == 1
